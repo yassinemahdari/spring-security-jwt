@@ -1,0 +1,20 @@
+import sculptormetamodel;
+
+
+	
+
+
+
+
+
+around transformation::Transformation::addIdAttribute(DomainObject domainObject) : 
+ 
+ null;
+ 
+ /*
+    domainObject.attributes.exists(a | a.naturalKey==true) ?
+        null :
+        myaddIdAttributeJava(domainObject);
+        
+DomainObject myaddIdAttributeJava(DomainObject domainObject):
+	*/	

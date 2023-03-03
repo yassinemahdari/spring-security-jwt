@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+					http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+
+	<bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref local="daoAuthenticationProvider" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="daoAuthenticationProvider"
+		class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="passwordEncoder" ref="passwordEncoder" />		
+		<property name="saltSource" ref="saltSource"/>	
+	</bean>
+
+	<bean id="userDetailsService"
+		class="ma.hps.powercard.serviceapi.security.UserDetailsServiceImpl">
+		<property name="usersService" ref="usersService" />
+		<property name="profileService" ref="profileService" />
+		<property name="secured_ressource_roleService" ref="secured_ressource_roleService"/>
+	</bean>
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.providers.encoding.ShaPasswordEncoder">
+		<constructor-arg value="512" />
+	</bean>
+
+	<bean id="saltSource"
+		class="org.springframework.security.providers.dao.salt.ReflectionSaltSource">
+		<property name="userPropertyToUse" value="username" />
+	</bean>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+		<property name="decisionVoters">
+			<list>
+				<ref bean="roleVoter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="roleVoter" class="org.springframework.security.vote.RoleVoter" />
+
+</beans>
